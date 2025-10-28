@@ -268,12 +268,17 @@ def handle_idea_selection(call):
         
         bot.send_message(user_id, post_text, parse_mode='HTML')
         
-        # Предлагаем варианты дальнейшего действия
-        markup = types.InlineKeyboardMarkup()
-        markup.add(types.InlineKeyboardButton("🔄 Создать новые идеи", callback_data="restart"))
-        markup.add(types.InlineKeyboardButton("⬅️ Выбрать другую идею", callback_data="select_other"))
+        # Предлагаем варианты дальнейшего действия с reply кнопками
+        reply_markup = types.ReplyKeyboardMarkup(
+            keyboard=[
+                [types.KeyboardButton("🔄 Создать новые идеи")],
+                [types.KeyboardButton("⬅️ Выбрать другую идею")]
+            ],
+            resize_keyboard=True,
+            one_time_keyboard=True
+        )
         
-        bot.send_message(user_id, "Что дальше?", reply_markup=markup)
+        bot.send_message(user_id, "Что дальше?", reply_markup=reply_markup)
         
     except Exception as e:
         logger.error(f"Error selecting idea: {e}")
@@ -322,6 +327,59 @@ def handle_select_other(call):
         ideas_text += f"<b>💡 Идея {idx}:</b>\n<i>{title}</i>\n{description}\n\n"
     
     # Создаем кнопки
+    markup = types.InlineKeyboardMarkup()
+    for idx in range(min(5, len(ideas))):
+        button = types.InlineKeyboardButton(
+            f"💡 Идея {idx + 1}",
+            callback_data=f"idea_{idx}"
+        )
+        markup.add(button)
+    
+    set_user_state(user_id, UserState.WAITING_IDEA_SELECTION)
+    bot.send_message(user_id, ideas_text, reply_markup=markup, parse_mode='HTML')
+
+
+@bot.message_handler(func=lambda message: message.text == "🔄 Создать новые идеи")
+def handle_create_new_ideas(message):
+    """Обработчик reply кнопки 'Создать новые идеи'"""
+    user_id = message.chat.id
+    
+    # Очищаем данные пользователя
+    if user_id in user_data_store:
+        user_data_store[user_id].clear()
+    
+    set_user_state(user_id, UserState.WAITING_NICHE)
+    
+    restart_text = (
+        "🎯 <b>Новый раунд генерации идей!</b>\n\n"
+        "Укажите вашу <b>нишу</b>:"
+    )
+    
+    # Удаляем reply клавиатуру
+    markup = types.ReplyKeyboardRemove()
+    bot.send_message(user_id, restart_text, parse_mode='HTML', reply_markup=markup)
+
+
+@bot.message_handler(func=lambda message: message.text == "⬅️ Выбрать другую идею")
+def handle_select_another_idea(message):
+    """Обработчик reply кнопки 'Выбрать другую идею'"""
+    user_id = message.chat.id
+    data = get_user_data(user_id)
+    
+    if 'ideas' not in data:
+        bot.send_message(user_id, "❌ Данные сессии потеряны. Начните заново /start")
+        return
+    
+    ideas = data['ideas']
+    
+    # Форматируем идеи
+    ideas_text = "🎨 <b>Выберите другую идею:</b>\n\n"
+    for idx, idea in enumerate(ideas[:5], 1):
+        title = idea.get('title', 'Без названия')
+        description = idea.get('description', 'Нет описания')
+        ideas_text += f"<b>💡 Идея {idx}:</b>\n<i>{title}</i>\n{description}\n\n"
+    
+    # Создаем inline кнопки
     markup = types.InlineKeyboardMarkup()
     for idx in range(min(5, len(ideas))):
         button = types.InlineKeyboardButton(
