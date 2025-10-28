@@ -103,7 +103,7 @@ AI-IdeaFactory/
 
 ✅ **Генерация идей**
 - 5 уникальных идей с описаниями
-- Использование DeepSeek R1 через OpenRouter
+- Использование OpenAI через OpenRouter
 
 ✅ **Генерация постов**
 - Готовые к публикации посты
@@ -184,7 +184,6 @@ self.app.add_handler(CommandHandler("my_command", self.my_handler))
 
 - [Документация python-telegram-bot](https://python-telegram-bot.readthedocs.io/)
 - [OpenRouter API Documentation](https://openrouter.ai/api/v1)
-- [DeepSeek R1 Model](https://openrouter.ai/deepseek/deepseek-r1:free)
 
 ---
 
