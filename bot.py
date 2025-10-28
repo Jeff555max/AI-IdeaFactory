@@ -269,14 +269,9 @@ def handle_idea_selection(call):
         bot.send_message(user_id, post_text, parse_mode='HTML')
         
         # Предлагаем варианты дальнейшего действия с reply кнопками
-        reply_markup = types.ReplyKeyboardMarkup(
-            keyboard=[
-                [types.KeyboardButton("🔄 Создать новые идеи")],
-                [types.KeyboardButton("⬅️ Выбрать другую идею")]
-            ],
-            resize_keyboard=True,
-            one_time_keyboard=True
-        )
+        reply_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+        reply_markup.add(types.KeyboardButton("🔄 Создать новые идеи"))
+        reply_markup.add(types.KeyboardButton("⬅️ Выбрать другую идею"))
         
         bot.send_message(user_id, "Что дальше?", reply_markup=reply_markup)
         
@@ -339,10 +334,11 @@ def handle_select_other(call):
     bot.send_message(user_id, ideas_text, reply_markup=markup, parse_mode='HTML')
 
 
-@bot.message_handler(func=lambda message: message.text == "🔄 Создать новые идеи")
+@bot.message_handler(func=lambda message: message.text and "Создать новые идеи" in message.text)
 def handle_create_new_ideas(message):
     """Обработчик reply кнопки 'Создать новые идеи'"""
     user_id = message.chat.id
+    logger.info(f"User {user_id} pressed 'Создать новые идеи' button")
     
     # Очищаем данные пользователя
     if user_id in user_data_store:
@@ -360,10 +356,11 @@ def handle_create_new_ideas(message):
     bot.send_message(user_id, restart_text, parse_mode='HTML', reply_markup=markup)
 
 
-@bot.message_handler(func=lambda message: message.text == "⬅️ Выбрать другую идею")
+@bot.message_handler(func=lambda message: message.text and "Выбрать другую идею" in message.text)
 def handle_select_another_idea(message):
     """Обработчик reply кнопки 'Выбрать другую идею'"""
     user_id = message.chat.id
+    logger.info(f"User {user_id} pressed 'Выбрать другую идею' button")
     data = get_user_data(user_id)
     
     if 'ideas' not in data:
