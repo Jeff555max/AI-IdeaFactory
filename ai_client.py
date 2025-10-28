@@ -52,6 +52,7 @@ class OpenRouterClient:
             Список идей или None при ошибке
         """
         prompt = IDEAS_GENERATION_PROMPT.format(
+            context="",
             niche=niche,
             goal=goal,
             content_format=content_format
@@ -123,9 +124,7 @@ class OpenRouterClient:
             Текст поста или None при ошибке
         """
         prompt = POST_GENERATION_PROMPT.format(
-            niche=niche,
-            goal=goal,
-            content_format=content_format,
+            context="",
             idea_title=idea_title,
             idea_description=idea_description
         )
