@@ -216,3 +216,7 @@ venv/
 env/
 ENV/
 .venv
+
+# Deployment scripts
+deploy.sh
+deploy_ipv4.sh
