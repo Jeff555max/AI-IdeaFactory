@@ -3,7 +3,7 @@
 AI-генератор идей для контента, использующий GPT-4o-mini через OpenAI API.
 
 # Пример реализации
-- [Демонстрация проекта](https://drive.google.com/file/d/1ZzXNL54X0V8YFAgM2vAndAorCAVlQyjM/view?usp=drive_link)
+- [Демонстрация проекта](https://drive.google.com/file/d/1ZzXNL54X0V8YFAgM2vAndAorCAVlQyjM/view?usp=sharing)
 
 *Нажмите на ссылку для просмотра видео*
 
