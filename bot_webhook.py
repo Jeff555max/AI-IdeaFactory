@@ -483,11 +483,11 @@ def main():
         logger.info(f"🌐 Ожидаемый webhook: {webhook_url}")
         logger.info("ℹ️ Убедитесь, что webhook установлен через Telegram API")
         
-        logger.info("🚀 Запуск Flask сервера на порту 8000")
+        logger.info("🚀 Запуск Flask сервера на порту 8001")
         logger.info("🤖 Бот готов к работе через webhook!")
         
         # Запускаем Flask
-        app.run(host='0.0.0.0', port=8000, debug=False)
+        app.run(host='0.0.0.0', port=8001, debug=False)
         
     except KeyboardInterrupt:
         logger.info("🛑 Бот остановлен пользователем")
