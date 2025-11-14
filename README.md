@@ -95,7 +95,7 @@ AI-IdeaFactory/
 
 ### prompts.py
 Системные промпты для AI:
-- `SYSTEM_PROMPT` - главный системный промпт (будет заполнен позже)
+- `SYSTEM_PROMPT` - главный системный промпт 
 - `IDEAS_GENERATION_PROMPT` - шаблон для генерации идей
 - `POST_GENERATION_PROMPT` - шаблон для генерации постов
 
